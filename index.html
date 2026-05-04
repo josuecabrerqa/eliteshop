@@ -39,13 +39,17 @@
       padding: 15px;
       margin: 15px;
       border-radius: 10px;
-      width: 250px;
+      width: 600px; /* más ancho para horizontal */
       box-sizing: border-box;
+      display: flex;          /* 👈 clave: horizontal */
+      align-items: center;    /* centra verticalmente */
+      text-align: left;
     }
 
     .producto img {
-      width: 100%;
+      width: 200px;           /* tamaño fijo imagen */
       border-radius: 10px;
+      margin-right: 15px;     /* espacio entre imagen y texto */
     }
 
     .producto h2 {
@@ -75,6 +79,20 @@
     button:hover {
       background: #21867a;
     }
+
+    /* Responsive: en pantallas pequeñas vuelve vertical */
+    @media (max-width: 700px) {
+      .producto {
+        flex-direction: column;
+        width: 90%;
+        text-align: center;
+      }
+
+      .producto img {
+        width: 100%;
+        margin: 0 0 15px 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -87,49 +105,50 @@
 
   <div id="catalogo" class="catalogo"></div>
 
-<!-- PapaParse desde CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <!-- PapaParse desde CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-<script>
-const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaM97uLBVGb8lkUfgKMLrt4ihN1RwidfEcawJ59FxseTdfZJls83ygTs2zMKsGT_vcNsMj8cpzilnr/pub?gid=0&single=true&output=csv";
+  <script>
+    const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaM97uLBVGb8lkUfgKMLrt4ihN1RwidfEcawJ59FxseTdfZJls83ygTs2zMKsGT_vcNsMj8cpzilnr/pub?gid=0&single=true&output=csv";
 
-Papa.parse(URL, {
-  download: true,
-  header: true, // Usa la primera fila como encabezados
-  skipEmptyLines: true,
-  complete: function(results) {
-    console.log(results.data);
-    const productos = results.data;
-    let html = "";
+    Papa.parse(URL, {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        const productos = results.data;
+        let html = "";
 
-    productos.forEach(prod => {
-      if (!prod.Nombre) return; // Solo procesa filas con nombre
+        productos.forEach(prod => {
+          if (!prod.Nombre) return;
 
-      html += `
-        <div class="producto">
-          <img src="${prod.Imagen}" alt="${prod.Nombre}">
-          <h2>${prod.Nombre}</h2>
-          <p>${prod.Descripcion}</p>
-          <p><strong>$${prod.Precio}</strong></p>
-          <button onclick="comprar('${prod.Nombre}')">Comprar</button>
-        </div>
-      `;
+          html += `
+            <div class="producto">
+              <img src="${prod.Imagen}" alt="${prod.Nombre}">
+              <div>
+                <h2>${prod.Nombre}</h2>
+                <p>${prod.Descripcion}</p>
+                <p><strong>$${prod.Precio}</strong></p>
+                <button onclick="comprar('${prod.Nombre}')">Comprar</button>
+              </div>
+            </div>
+          `;
+        });
+
+        document.getElementById("catalogo").innerHTML = html || "<p>No hay productos disponibles.</p>";
+      },
+      error: function(err) {
+        document.getElementById("catalogo").innerHTML = "<p>Error al cargar productos.</p>";
+        console.error("Error PapaParse:", err);
+      }
     });
 
-    document.getElementById("catalogo").innerHTML = html || "<p>No hay productos disponibles.</p>";
-  },
-  error: function(err) {
-    document.getElementById("catalogo").innerHTML = "<p>Error al cargar productos.</p>";
-    console.error("Error PapaParse:", err);
-  }
-});
-
-function comprar(producto) {
-  const numero = "573001234567";
-  const mensaje = `Hola, quiero comprar: ${producto}`;
-  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
-}
-</script>
+    function comprar(producto) {
+      const numero = "573001234567";
+      const mensaje = `Hola, quiero comprar: ${producto}`;
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
+    }
+  </script>
 
 </body>
 </html>
