@@ -12,11 +12,18 @@
       color: #e0e1dd;
       margin: 0;
       padding: 0;
+      font-size: 16px; /* base */
     }
 
     header {
       padding: 20px;
       text-align: center;
+    }
+
+    header img {
+      width: 300px;     /* tamaño logo en escritorio */
+      max-width: 100%;
+      height: auto;
     }
 
     h1 {
@@ -40,12 +47,13 @@
       border: 1px solid #52796f;
       border-radius: 12px;
       margin: 10px;
-      padding: 15px;
+      padding: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column; /* móvil: vertical */
       text-align: center;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 95%; /* ocupa casi todo el ancho en móvil */
     }
 
     .producto:hover {
@@ -61,28 +69,29 @@
 
     .producto h2 {
       color: #cad2c5;
-      font-size: 20px;
+      font-size: 22px;
       margin: 10px 0;
     }
 
     .producto p {
-      font-size: 14px;
+      font-size: 16px;
       color: #e0e1dd;
     }
 
     .producto strong {
       color: #f4a261;
+      font-size: 18px;
     }
 
     button {
       background: #2a9d8f;
       border: none;
-      padding: 12px 18px;
+      padding: 14px 20px;
       color: white;
       cursor: pointer;
       border-radius: 6px;
-      margin-top: 10px;
-      font-size: 16px;
+      margin-top: 12px;
+      font-size: 18px;
       font-weight: bold;
       transition: background 0.2s ease;
     }
@@ -101,9 +110,16 @@
       }
 
       .producto img {
-        width: 200px;
+        width: 220px;
         margin-right: 20px;
         margin-bottom: 0;
+      }
+    }
+
+    /* Logo más pequeño en móviles */
+    @media (max-width: 600px) {
+      header img {
+        width: 220px;
       }
     }
   </style>
@@ -112,7 +128,7 @@
 
   <!-- LOGO -->
   <header>
-    <img src="https://i.postimg.cc/bvxNYmhC/ELITE-PERFIL-GRIS-blanco-logo-transparente-150x150.png" width="333" alt="Logo Elite Parches Tácticos">
+    <img src="https://i.postimg.cc/bvxNYmhC/ELITE-PERFIL-GRIS-blanco-logo-transparente-150x150.png" alt="Logo Elite Parches Tácticos">
     <p>Fábrica de parches tácticos en PVC, al mayor y detal</p>
   </header>
 
