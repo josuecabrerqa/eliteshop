@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Elite Parches Tácticos</title>
+  <!-- Tipografía futurista desde Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Orbitron', Arial, sans-serif;
       background: #2f3e46;
       color: #e0e1dd;
-      text-align: center;
       margin: 0;
       padding: 0;
     }
 
     header {
       padding: 20px;
+      text-align: center;
     }
 
     h1 {
@@ -36,30 +38,36 @@
     .producto {
       background: #354f52;
       border: 1px solid #52796f;
+      border-radius: 12px;
+      margin: 10px;
       padding: 15px;
-      margin: 15px;
-      border-radius: 10px;
-      width: 600px; /* más ancho para horizontal */
-      box-sizing: border-box;
-      display: flex;          /* 👈 clave: horizontal */
-      align-items: center;    /* centra verticalmente */
-      text-align: left;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column; /* móvil: vertical */
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .producto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.6);
     }
 
     .producto img {
-      width: 200px;           /* tamaño fijo imagen */
+      width: 100%;
       border-radius: 10px;
-      margin-right: 15px;     /* espacio entre imagen y texto */
+      margin-bottom: 15px;
     }
 
     .producto h2 {
       color: #cad2c5;
-      font-size: 18px;
+      font-size: 20px;
       margin: 10px 0;
     }
 
     .producto p {
       font-size: 14px;
+      color: #e0e1dd;
     }
 
     .producto strong {
@@ -69,28 +77,33 @@
     button {
       background: #2a9d8f;
       border: none;
-      padding: 10px 15px;
+      padding: 12px 18px;
       color: white;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 6px;
       margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background 0.2s ease;
     }
 
     button:hover {
       background: #21867a;
     }
 
-    /* Responsive: en pantallas pequeñas vuelve vertical */
-    @media (max-width: 700px) {
+    /* Escritorio: horizontal */
+    @media (min-width: 768px) {
       .producto {
-        flex-direction: column;
-        width: 90%;
-        text-align: center;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        width: 600px;
       }
 
       .producto img {
-        width: 100%;
-        margin: 0 0 15px 0;
+        width: 200px;
+        margin-right: 20px;
+        margin-bottom: 0;
       }
     }
   </style>
@@ -99,7 +112,7 @@
 
   <!-- LOGO -->
   <header>
-    <img src="https://i.postimg.cc/bvxNYmhC/ELITE-PERFIL-GRIS-blanco-logo-transparente-150x150.png" width="333" alt="Logo Elite Parches Tácticos">
+    <img src="https://i.postimg.cc/bvxNYmhC/ELITE-PERFIL-GRIS-blanco-logo-transparente-150x150.png" width="200" alt="Logo Elite Parches Tácticos">
     <p>Fábrica de parches tácticos en PVC, al mayor y detal</p>
   </header>
 
