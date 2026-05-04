@@ -6,7 +6,6 @@
   <!-- Tipografía futurista -->
   <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
   <style>
-    /* 🎨 ESTILOS GENERALES */
     body {
       font-family: 'Aldrich', Arial, sans-serif;
       background: #2f3e46;
@@ -15,8 +14,6 @@
       padding: 0;
       font-size: 16px;
     }
-
-    /* 🖼️ ENCABEZADO */
     header {
       padding: 20px;
       text-align: center;
@@ -26,8 +23,6 @@
       max-width: 100%;
       height: auto;
     }
-
-    /* 📦 CATÁLOGO DE PRODUCTOS */
     .catalogo {
       display: flex;
       flex-wrap: wrap;
@@ -84,8 +79,6 @@
     button:hover {
       background: #21867a;
     }
-
-    /* 🛒 CARRITO */
     #carrito {
       background: #354f52;
       border: 1px solid #52796f;
@@ -121,8 +114,6 @@
       background: #e76f51;
       color: white;
     }
-
-    /* 📱 RESPONSIVE */
     @media (min-width: 768px) {
       .producto {
         flex-direction: row;
@@ -145,16 +136,13 @@
 </head>
 <body>
 
-  <!-- 🖼️ LOGO Y DESCRIPCIÓN -->
   <header>
     <img src="https://i.postimg.cc/bvxNYmhC/ELITE-PERFIL-GRIS-blanco-logo-transparente-150x150.png" alt="Logo Elite Parches Tácticos">
     <p>Fábrica de parches tácticos en PVC, al mayor y detal</p>
   </header>
 
-  <!-- 📦 CATÁLOGO -->
   <div id="catalogo" class="catalogo"></div>
 
-  <!-- 🛒 CARRITO -->
   <div id="carrito">
     <h2>🛒 Carrito</h2>
     <ul id="lista-carrito"></ul>
@@ -162,14 +150,12 @@
     <button onclick="finalizarCompra()">Enviar cuenta de cobro</button>
   </div>
 
-  <!-- 📊 PapaParse para leer Google Sheets -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script>
     const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaM97uLBVGb8lkUfgKMLrt4ihN1RwidfEcawJ59FxseTdfZJls83ygTs2zMKsGT_vcNsMj8cpzilnr/pub?gid=0&single=true&output=csv";
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw20hS20EG6pv6bC0wmojuZhJCJRNraOYuSsxcsSdc4JQSlaeXWT8LZIKr6Lp02WErEqw/exec";
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    /* 📦 Cargar productos */
     Papa.parse(URL, {
       download: true,
       header: true,
@@ -196,7 +182,6 @@
       }
     });
 
-    /* ➕ Añadir producto */
     function agregarAlCarrito(nombre, precio) {
       const productoExistente = carrito.find(p => p.nombre === nombre);
       if (productoExistente) {
@@ -207,13 +192,11 @@
       actualizarCarrito();
     }
 
-    /* ❌ Eliminar producto */
     function eliminarDelCarrito(nombre) {
       carrito = carrito.filter(p => p.nombre !== nombre);
       actualizarCarrito();
     }
 
-    /* 🔄 Actualizar carrito */
     function actualizarCarrito() {
       const lista = document.getElementById("lista-carrito");
       lista.innerHTML = "";
@@ -231,11 +214,51 @@
       localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
-    /* 🧾 Generar código único de factura */
     function generarCodigoFactura() {
       const fecha = new Date();
       return "FAC-" + fecha.getFullYear() +
              (fecha.getMonth()+1).toString().padStart(2,"0") +
              fecha.getDate().toString().padStart(2,"0") + "-" +
              fecha.getHours().toString().padStart(2,"0") +
-             fecha.getMinutes().toString().padStart(2,"0
+             fecha.getMinutes().toString().padStart(2,"0") +
+             fecha.getSeconds().toString().padStart(2,"0");
+    }
+
+    function finalizarCompra() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+
+      const codigo = generarCodigoFactura();
+      let total = 0;
+      let mensaje = "🧾 *Cuenta de Cobro - Elite Parches Tácticos*\n";
+            mensaje += `Código: ${codigo}\nRUT: 700214612\n\n`;
+
+      carrito.forEach(p => {
+        const subtotal = p.precio * p.cantidad;
+        total += subtotal;
+        mensaje += `• ${p.nombre} x${p.cantidad} = $${subtotal.toFixed(2)}\n`;
+      });
+
+      mensaje += `\nTotal a pagar: $${total.toFixed(2)}\n\n`;
+      mensaje += "Cancela tus productos a Breb-b 0091706533.\n";
+      mensaje += "Tu pedido dependiendo de la cantidad de parches se estaría enviando en el transcurso de 3 a 5 días hábiles.\n";
+      mensaje += "Si tienes dudas déjanos tu mensaje en esta conversación de WhatsApp.\n\n";
+      mensaje += "Gracias por tu compra 🙌";
+
+      // Guardar en Google Sheets (solo datos de la factura)
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ codigo: codigo, productos: carrito, total: total }),
+        headers: { "Content-Type": "application/json" }
+      }).then(res => console.log("Factura guardada en Google Sheets"));
+
+      // Enviar a WhatsApp
+      const numero = "573153334129";
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
+    }
+  </script>
+
+</body>
+</html>
