@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Elite Parches Tácticos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #2f3e46;
+      color: #e0e1dd;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 20px;
+    }
+
+    h1 {
+      color: #84a98c;
+      margin: 10px 0;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    .catalogo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .producto {
+      background: #354f52;
+      border: 1px solid #52796f;
+      padding: 15px;
+      margin: 15px;
+      border-radius: 10px;
+      width: 250px;
+      box-sizing: border-box;
+    }
+
+    .producto img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .producto h2 {
+      color: #cad2c5;
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .producto p {
+      font-size: 14px;
+    }
+
+    .producto strong {
+      color: #f4a261;
+    }
+
+    button {
+      background: #2a9d8f;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #21867a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGO -->
+  <header>
+    <img src="https://i.postimg.cc/bvxNYmhC/ELITE-PERFIL-GRIS-blanco-logo-transparente-150x150.png" width="333" alt="Logo Elite Parches Tácticos">
+    <p>Fábrica de parches tácticos en PVC, al mayor y detal</p>
+  </header>
+
+  <div id="catalogo" class="catalogo"></div>
+
+<!-- PapaParse desde CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<script>
+const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaM97uLBVGb8lkUfgKMLrt4ihN1RwidfEcawJ59FxseTdfZJls83ygTs2zMKsGT_vcNsMj8cpzilnr/pub?gid=0&single=true&output=csv";
+
+Papa.parse(URL, {
+  download: true,
+  header: true, // Usa la primera fila como encabezados
+  skipEmptyLines: true,
+  complete: function(results) {
+    console.log(results.data);
+    const productos = results.data;
+    let html = "";
+
+    productos.forEach(prod => {
+      if (!prod.Nombre) return; // Solo procesa filas con nombre
+
+      html += `
+        <div class="producto">
+          <img src="${prod.Imagen}" alt="${prod.Nombre}">
+          <h2>${prod.Nombre}</h2>
+          <p>${prod.Descripcion}</p>
+          <p><strong>$${prod.Precio}</strong></p>
+          <button onclick="comprar('${prod.Nombre}')">Comprar</button>
+        </div>
+      `;
+    });
+
+    document.getElementById("catalogo").innerHTML = html || "<p>No hay productos disponibles.</p>";
+  },
+  error: function(err) {
+    document.getElementById("catalogo").innerHTML = "<p>Error al cargar productos.</p>";
+    console.error("Error PapaParse:", err);
+  }
+});
+
+function comprar(producto) {
+  const numero = "573001234567";
+  const mensaje = `Hola, quiero comprar: ${producto}`;
+  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
+}
+</script>
+
+</body>
+</html>
