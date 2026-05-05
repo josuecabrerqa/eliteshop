@@ -237,8 +237,9 @@
         `;
       });
       document.getElementById("total").textContent = total.toFixed(2);
-      localStorage.setItem("carrito", JSON.stringify(carrito));
-    }
+  // ✅ Aquí estaba el error: faltaba cerrar correctamente
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+}
 
     function toggleCarrito() {
       const carritoDiv = document.getElementById("carrito");
