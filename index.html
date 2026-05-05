@@ -121,6 +121,23 @@
       border: none;
     }
 
+    /* Botón de comprar dentro del carrito */
+    #carrito .buy-btn {
+      background: #2a9d8f;
+      border: none;
+      padding: 16px;
+      color: white;
+      cursor: pointer;
+      border-radius: 30px;
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      width: 100%;
+    }
+    #carrito .buy-btn:hover {
+      background: #21867a;
+    }
+
     /* Barra inferior de navegación */
     .bottom-nav {
       position: fixed;
@@ -128,12 +145,12 @@
       width: 100%;
       background: #2f3e46;
       display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
+      justify-content: center;
+      padding: 15px 0;
     }
     .nav-item {
       color: #fff;
-      font-size: 22px;
+      font-size: 66px; /* 3 veces más grande */
       text-decoration: none;
       cursor: pointer;
     }
@@ -153,16 +170,14 @@
     <h2>🛒 Carrito</h2>
     <ul id="lista-carrito"></ul>
     <p><strong>Total: $<span id="total">0</span></strong></p>
-    <button onclick="finalizarCompra()">Enviar cuenta de cobro</button>
+    <!-- Botón de comprar -->
+    <button class="buy-btn" onclick="finalizarCompra()">Comprar</button>
   </div>
 
   <!-- Barra inferior de navegación -->
   <nav class="bottom-nav">
-    <span class="nav-item">🏠</span>
-    <span class="nav-item">❤️</span>
     <span class="nav-item" onclick="toggleCarrito()">🛒</span>
   </nav>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script>
     const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaM97uLBVGb8lkUfgKMLrt4ihN1RwidfEcawJ59FxseTdfZJls83ygTs2zMKsGT_vcNsMj8cpzilnr/pub?gid=0&single=true&output=csv";
@@ -226,6 +241,10 @@
     }
 
     function toggleCarrito() {
+      const carritoDiv = document.getElementById("carrito");
+      carritoDiv.style
+
+        function toggleCarrito() {
       const carritoDiv = document.getElementById("carrito");
       carritoDiv.style.display = carritoDiv.style.display === "block" ? "none" : "block";
     }
