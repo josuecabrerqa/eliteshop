@@ -212,3 +212,67 @@
       });
       document.getElementById("total").textContent = total.toFixed(2);
       localStorage.setItem("carrito", 
+                           
+    /* 🧾 Generar código único de factura con numeración desde 16 */
+    function generarCodigoFactura() {
+      const fecha = new Date();
+      // Historial de facturas guardadas en localStorage
+      let historial = JSON.parse(localStorage.getItem("facturas")) || [];
+      // La numeración empieza desde 16
+      let numeroFactura = 16 + historial.length;
+
+      // Timestamp para asegurar unicidad
+      const timestamp = fecha.getFullYear().toString() +
+                        (fecha.getMonth()+1).toString().padStart(2,"0") +
+                        fecha.getDate().toString().padStart(2,"0") +
+                        fecha.getHours().toString().padStart(2,"0") +
+                        fecha.getMinutes().toString().padStart(2,"0") +
+                        fecha.getSeconds().toString().padStart(2,"0");
+
+      return "FAC-" + numeroFactura + "-" + timestamp;
+    }
+
+    /* ✅ Finalizar compra */
+    function finalizarCompra() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+
+      const codigo = generarCodigoFactura();
+      let total = 0;
+      let mensaje = "🧾 *Cuenta de Cobro - Elite Parches Tácticos*\n";
+      mensaje += `Código: ${codigo}\nRUT: 700214612\n\n`;
+
+      carrito.forEach(p => {
+        const subtotal = p.precio * p.cantidad;
+        total += subtotal;
+        mensaje += `• ${p.nombre} x${p.cantidad} = $${subtotal.toFixed(2)}\n`;
+      });
+
+      mensaje += `\nTotal a pagar: $${total.toFixed(2)}\n\n`;
+      mensaje += "Cancela tus productos a Breb-b 0091706533.\n";
+      mensaje += "Tu pedido dependiendo de la cantidad de parches se estaría enviando en el transcurso de 3 a 5 días hábiles.\n";
+      mensaje += "Si tienes dudas déjanos tu mensaje en esta conversación de WhatsApp.\n\n";
+      mensaje += "Gracias por tu compra 🙌";
+
+      // Guardar en Google Sheets (solo datos de la factura)
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ codigo: codigo, productos: carrito, total: total }),
+        headers: { "Content-Type": "application/json" }
+      }).then(res => console.log("Factura guardada en Google Sheets"));
+
+      // Guardar también en localStorage para llevar control de numeración
+      let historial = JSON.parse(localStorage.getItem("facturas")) || [];
+      historial.push({ codigo: codigo, productos: carrito, total: total, fecha: new Date().toLocaleString() });
+      localStorage.setItem("facturas", JSON.stringify(historial));
+
+      // Enviar a WhatsApp
+      const numero = "573153334129";
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
+    }
+  </script>
+
+</body>
+</html>
