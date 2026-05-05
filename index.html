@@ -223,7 +223,7 @@
       actualizarCarrito();
     }
 
-    function actualizarCarrito() {
+        function actualizarCarrito() {
       const lista = document.getElementById("lista-carrito");
       lista.innerHTML = "";
       let total = 0;
@@ -237,15 +237,10 @@
         `;
       });
       document.getElementById("total").textContent = total.toFixed(2);
-  // ✅ Aquí estaba el error: faltaba cerrar correctamente
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-}
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
 
     function toggleCarrito() {
-      const carritoDiv = document.getElementById("carrito");
-      carritoDiv.style
-
-        function toggleCarrito() {
       const carritoDiv = document.getElementById("carrito");
       carritoDiv.style.display = carritoDiv.style.display === "block" ? "none" : "block";
     }
@@ -260,11 +255,9 @@
                         fecha.getHours().toString().padStart(2,"0") +
                         fecha.getMinutes().toString().padStart(2,"0") +
                         fecha.getSeconds().toString().padStart(2,"0");
-
       return "FAC-" + numeroFactura + "-" + timestamp;
     }
 
-    /* ✅ Finalizar compra */
     function finalizarCompra() {
       if (carrito.length === 0) {
         alert("Tu carrito está vacío.");
@@ -288,19 +281,16 @@
       mensaje += "Si tienes dudas déjanos tu mensaje en esta conversación de WhatsApp.\n\n";
       mensaje += "Gracias por tu compra 🙌";
 
-      // Guardar en Google Sheets (solo datos de la factura)
       fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({ codigo: codigo, productos: carrito, total: total }),
         headers: { "Content-Type": "application/json" }
-      }).then(res => console.log("Factura guardada en Google Sheets"));
+      });
 
-      // Guardar también en localStorage para llevar control de numeración
       let historial = JSON.parse(localStorage.getItem("facturas")) || [];
       historial.push({ codigo: codigo, productos: carrito, total: total, fecha: new Date().toLocaleString() });
       localStorage.setItem("facturas", JSON.stringify(historial));
 
-      // Enviar a WhatsApp
       const numero = "573153334129";
       window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
     }
