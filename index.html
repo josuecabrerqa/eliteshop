@@ -32,7 +32,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      padding: 20px;
+      padding: 80px 20px 100px; /* espacio para header y barra inferior */
     }
     .producto {
       background: #fff;
@@ -84,7 +84,7 @@
     /* 🛒 CARRITO MODAL */
     #carrito {
       position: fixed;
-      bottom: 0;
+      bottom: 70px; /* 👉 más arriba de la barra inferior */
       background: #fff;
       box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
       padding: 20px;
@@ -132,6 +132,9 @@
 
     /* Responsive carrito */
     @media (max-width: 600px) {
+      .catalogo {
+        grid-template-columns: repeat(2, 1fr); /* 👉 2 columnas en celular */
+      }
       #carrito {
         left: 0;
         right: 0;
@@ -241,7 +244,7 @@
         total += item.precio * item.cantidad;
         lista.innerHTML += `
           <li>
-            ${item.nombre} - $${item.precio} x ${item.cantidad}
+                        ${item.nombre} - $${item.precio} x ${item.cantidad}
             <button onclick="eliminarDelCarrito('${item.nombre}')">X</button>
           </li>
         `;
@@ -250,7 +253,7 @@
       localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
-      function toggleCarrito() {
+    function toggleCarrito() {
       const carritoDiv = document.getElementById("carrito");
       carritoDiv.style.display = carritoDiv.style.display === "block" ? "none" : "block";
     }
