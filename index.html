@@ -61,8 +61,12 @@
     .banner-carousel .prev { left: 10px; }
     .banner-carousel .next { right: 10px; }
     
-/* Ajustes para botones en celular */
+/* En celular: botones grandes y banner ancho completo */
 @media (max-width: 600px) {
+  .banner-carousel img {
+    width: 100%;   /* ocupa todo el ancho */
+    height: auto;  /* mantiene proporción */
+  }
   .banner-carousel .prev,
   .banner-carousel .next {
     font-size: 72px;   /* 3 veces más grandes */
@@ -70,13 +74,13 @@
   }
 }
 
-/* Ajustes para reducir banner en PC */
+/* En PC: conservar proporción pero limitar altura */
 @media (min-width: 901px) {
   .banner-carousel img {
     max-height: 150px; /* la mitad del tamaño */
-    width: auto;
+    width: auto;       /* conserva ancho real */
     display: block;
-    margin: 0 auto;
+    margin: 0 auto;    /* centrado */
   }
 }
 
