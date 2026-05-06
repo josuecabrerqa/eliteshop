@@ -39,17 +39,29 @@
       width: 300%; /* 3 imágenes */
       animation: slide 12s infinite;
     }
-    .banner-carousel img {
-  width: 100%;       /* ocupa todo el ancho disponible */
-  height: auto;      /* mantiene proporción */
-  max-height: 300px; /* límite de altura en PC */
-  object-fit: cover; /* recorta si es necesario */
+   .banner-carousel img {
+  height: auto;
+  object-fit: cover;
 }
-@media (max-width: 600px) {
+
+/* En pantallas grandes (PC) conserva tamaño original */
+@media (min-width: 601px) {
   .banner-carousel img {
-    max-height: 180px; /* más compacto en celular */
+    width: auto;   /* conserva ancho real */
+    max-width: 100%; /* evita que se desborde */
+    display: block;
+    margin: 0 auto; /* centra la imagen */
   }
 }
+
+/* En pantallas pequeñas (celular) ocupa todo el ancho */
+@media (max-width: 600px) {
+  .banner-carousel img {
+    width: 100%;   /* ocupa todo el ancho */
+    height: auto;  /* mantiene proporción */
+  }
+}
+
 
     @keyframes slide {
       0%   { transform: translateX(0); }
