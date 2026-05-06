@@ -54,12 +54,31 @@
       background: rgba(0,0,0,0.5);
       color: white;
       border: none;
-      padding: 10px;
+      padding: 21px;
       cursor: pointer;
-      font-size: 24px;
+      font-size: 45px;
     }
     .banner-carousel .prev { left: 10px; }
     .banner-carousel .next { right: 10px; }
+    
+/* Ajustes para botones en celular */
+@media (max-width: 600px) {
+  .banner-carousel .prev,
+  .banner-carousel .next {
+    font-size: 72px;   /* 3 veces más grandes */
+    padding: 20px;     /* más área táctil */
+  }
+}
+
+/* Ajustes para reducir banner en PC */
+@media (min-width: 901px) {
+  .banner-carousel img {
+    max-height: 150px; /* la mitad del tamaño */
+    width: auto;
+    display: block;
+    margin: 0 auto;
+  }
+}
 
     /* 📦 CATÁLOGO DE PRODUCTOS */
     .catalogo {
