@@ -35,12 +35,12 @@
       overflow: hidden;
     }
     .banner-carousel .slides {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%; /* cada imagen ocupará todo el ancho */
+}
     .banner-carousel img {
-      flex-shrink: 1;
-      width: 100%;
+    flex: 0 0 100%; /* cada imagen ocupa 100% del carrusel */      width: 100%;
       height: auto;
       object-fit: cover;
     }
