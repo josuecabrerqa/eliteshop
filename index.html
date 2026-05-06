@@ -61,28 +61,31 @@
     .banner-carousel .prev { left: 10px; }
     .banner-carousel .next { right: 10px; }
     
-/* En celular: botones grandes y banner ancho completo */
+/* En celular: banner ocupa todo el ancho y botones grandes */
 @media (max-width: 600px) {
   .banner-carousel img {
-    width: 100%;   /* ocupa todo el ancho */
+    width: 100%;   /* ancho completo */
     height: auto;  /* mantiene proporción */
+    max-height: none; /* sin límite de altura */
   }
   .banner-carousel .prev,
   .banner-carousel .next {
     font-size: 72px;   /* 3 veces más grandes */
-    padding: 20px;     /* más área táctil */
+    padding: 20px;     /* área táctil más cómoda */
   }
 }
 
-/* En PC: conservar proporción pero limitar altura */
+/* En PC: reducir altura del banner a la mitad */
 @media (min-width: 901px) {
   .banner-carousel img {
-    max-height: 150px; /* la mitad del tamaño */
     width: auto;       /* conserva ancho real */
+    max-width: 100%;   /* no se desborda */
+    max-height: 200px; /* altura reducida (ajusta según lo que quieras) */
     display: block;
     margin: 0 auto;    /* centrado */
   }
 }
+
 
     /* 📦 CATÁLOGO DE PRODUCTOS */
     .catalogo {
