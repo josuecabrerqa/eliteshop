@@ -29,58 +29,37 @@
 
     /* 🎉 Carrusel de banners */
     .banner-carousel {
-      width: 100%;
-      overflow: hidden;
       position: relative;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: auto;
+      overflow: hidden;
     }
     .banner-carousel .slides {
       display: flex;
-      width: 1024%; /* 3 imágenes */
-      animation: slide 12s infinite;
+      transition: transform 0.5s ease;
     }
-.banner-carousel img {
-  flex-shrink: 0;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-/* En pantallas grandes (PC) conserva tamaño original */
-@media (min-width: 900px) {
-  .banner-carousel img {
-    width: auto;   /* conserva ancho real */
-    max-width: 100%; /* evita que se desborde */
-    display: block;
-    margin: 0 auto; /* centra la imagen */
-  }
-}
-
-/* En pantallas pequeñas (celular) ocupa todo el ancho */
-@media (max-width: 900px) {
-  .banner-carousel img {
-    width: 100%;   /* ocupa todo el ancho */
-    height: auto;  /* mantiene proporción */
-  }
-}
-
-
- /* Animación más fluida */
-@keyframes slide {
-  0%   { transform: translateX(0); }
-  20%  { transform: translateX(0); }
-  33%  { transform: translateX(-100%); }
-  53%  { transform: translateX(-100%); }
-  66%  { transform: translateX(-200%); }
-  86%  { transform: translateX(-200%); }
-  100% { transform: translateX(0); }
-}
-    @media (max-width: 600px) {
-      .banner-carousel img { height: 180px; }
+    .banner-carousel img {
+      flex-shrink: 0;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
     }
-    @media (min-width: 601px) {
-      .banner-carousel img { height: 300px; }
+
+    /* Botones */
+    .banner-carousel .prev,
+    .banner-carousel .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 24px;
     }
+    .banner-carousel .prev { left: 10px; }
+    .banner-carousel .next { right: 10px; }
 
     /* 📦 CATÁLOGO DE PRODUCTOS */
     .catalogo {
@@ -184,6 +163,8 @@
       <img src="https://i.postimg.cc/pd0ksb7b/promosion-de-eventos.png" alt="Banner 2">
       <img src="https://i.postimg.cc/TPkQtMsr/llaveros-y-pulseras.png" alt="Banner 3">
     </div>
+    <button class="prev" onclick="moverSlide(-1)">&#10094;</button>
+    <button class="next" onclick="moverSlide(1)">&#10095;</button>
   </div>
 
   <div id="catalogo" class="catalogo"></div>
@@ -201,6 +182,16 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script>
+    /* 🎉 Carrusel con botones */
+    let indice = 0;
+    function moverSlide(n) {
+      const slides = document.querySelector(".banner-carousel .slides");
+      const total = slides.children.length;
+      indice = (indice + n + total) % total;
+      slides.style.transform = `translateX(-${indice * 100}%)`;
+    }
+
+    /* 📦 Catálogo y carrito */
     const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaM97uLBVGb8lkUfgKMLrt4ihN1RwidfEcawJ59FxseTdfZJls83ygTs2zMKsGT_vcNsMj8cpzilnr/pub?gid=0&single=true&output=csv";
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymztI5HiOUE4KMLuEzrY5OTYuZdW8jcQ6WM-hAz250befv1Gk7t0DvLe1ahBGvABMyqw/exec";
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
@@ -284,10 +275,9 @@
         alert("Tu carrito está vacío.");
         return;
       }
-
       const codigo = generarCodigoFactura();
       let total = 0;
-      let mensaje = "🧾 *Cuenta de Cobro - Elite Parches Tácticos*\n";
+      let mensaje = "🧾 Cuenta de Cobro - Elite Parches Tácticos\n";
       mensaje += `Código: ${codigo}\nRUT: 700214612\n\n`;
 
       carrito.forEach(p => {
@@ -306,19 +296,28 @@
       fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({ codigo: codigo, productos: carrito, total: total }),
-        headers: { "Content-Type": "application/json" }
-      }).then(res => console.log("Factura guardada en Google Sheets"));
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log("Factura guardada:", data);
+      })
+      .catch(error => {
+        console.error("Error al guardar la factura:", error);
+      });
 
-      // Guardar también en localStorage
+      // Guardar historial local
       let historial = JSON.parse(localStorage.getItem("facturas")) || [];
-      historial.push({ codigo: codigo, productos: carrito, total: total, fecha: new Date().toLocaleString() });
+      historial.push({ codigo, productos: carrito, total });
       localStorage.setItem("facturas", JSON.stringify(historial));
 
-      // Enviar a WhatsApp
-      const numero = "573153334129";
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
+      // Abrir WhatsApp con el mensaje
+      const url = `https://wa.me/573153334129?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
+
+      // Vaciar carrito
+      carrito = [];
+      actualizarCarrito();
     }
   </script>
-
 </body>
 </html>
