@@ -40,11 +40,17 @@
       animation: slide 12s infinite;
     }
     .banner-carousel img {
-      width: 100%;
-      flex-shrink: 0;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+  width: 100%;       /* ocupa todo el ancho disponible */
+  height: auto;      /* mantiene proporción */
+  max-height: 300px; /* límite de altura en PC */
+  object-fit: cover; /* recorta si es necesario */
+}
+@media (max-width: 600px) {
+  .banner-carousel img {
+    max-height: 180px; /* más compacto en celular */
+  }
+}
+
     @keyframes slide {
       0%   { transform: translateX(0); }
       30%  { transform: translateX(0); }
