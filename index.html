@@ -85,11 +85,17 @@
     #carrito {
       position: fixed;
       bottom: 70px; /* 👉 más arriba de la barra inferior */
+      left: 0;
+      right: 0;
       background: #fff;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
       box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
       padding: 20px;
+      max-height: 60%;
       overflow-y: auto;
       display: none;
+      z-index: 1000; /* 👉 encima de la barra */
     }
     #carrito h2 {
       margin: 0 0 10px;
@@ -130,18 +136,14 @@
       background: #21867a;
     }
 
-    /* Responsive carrito */
+    /* Responsive carrito y catálogo */
     @media (max-width: 600px) {
       .catalogo {
-        grid-template-columns: repeat(2, 1fr); /* 👉 2 columnas en celular */
+        grid-template-columns: repeat(2, 1fr); /* 👉 dos columnas en celular */
       }
       #carrito {
-        left: 0;
-        right: 0;
         width: 100%;
         max-height: 80%;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
       }
     }
     @media (min-width: 601px) {
@@ -163,6 +165,7 @@
       display: flex;
       justify-content: center;
       padding: 15px 0;
+      z-index: 999; /* 👉 debajo del carrito */
     }
     .nav-item {
       color: #fff;
